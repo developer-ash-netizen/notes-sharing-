@@ -1,5 +1,6 @@
+// backend/routes/noteRoutes.js
 import express from 'express';
-import { upload } from '../config/cloudinary.js';
+import multer from 'multer';
 import {
   uploadNote,
   getApprovedNotes,
@@ -10,7 +11,13 @@ import {
 
 const router = express.Router();
 
+// ✅ Multer will temporarily store files in /uploads before sending to Google Drive
+const upload = multer({ dest: 'uploads/' });
+
+// ✅ Upload route (Google Drive replaces Cloudinary here)
 router.post('/upload', upload.single('file'), uploadNote);
+
+// Other routes remain the same
 router.get('/', getApprovedNotes);
 router.get('/pending', getPendingNotes);
 router.patch('/approve/:id', approveNote);
